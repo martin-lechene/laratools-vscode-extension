@@ -1,5 +1,8 @@
 # Laravel Tools pour VS Code
 
+<img width="669" height="242" alt="image" src="https://github.com/user-attachments/assets/d10c4715-2035-4724-866d-1f8c300d2a94" />
+
+
 ## Description
 
 Laravel Tools est une extension VS Code qui facilite le développement d'applications Laravel. Elle offre des fonctionnalités pratiques pour travailler avec Artisan, rechercher des composants Blade, exécuter des tests et plus encore.
