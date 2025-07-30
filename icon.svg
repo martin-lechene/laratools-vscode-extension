@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Fond Laravel rouge -->
+  <rect width="128" height="128" rx="10" fill="#FF2D20"/>
+  
+  <!-- Logo Laravel stylisé -->
+  <path d="M64 20L40 30v40l24 10 24-10V30L64 20z" fill="white"/>
+  
+  <!-- VS Code stylisé -->
+  <path d="M88 64v24L64 98l-24-10V64l24 10 24-10z" fill="#007ACC"/>
+  
+  <!-- Détails -->
+  <path d="M64 30l-12 5v30l12 5 12-5V35l-12-5zM52 75l-6-3v-16l6-3M76 75l6-3v-16l-6-3" fill="none" stroke="#FF2D20" stroke-width="2"/>
+  
+  <!-- Texte -->
+  <text x="64" y="116" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">Laravel Tools</text>
+</svg>

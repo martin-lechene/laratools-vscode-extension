@@ -1,0 +1,12 @@
+.vscode
+.vscode-test
+src
+.gitignore
+.github
+tsconfig.json
+.eslintrc.json
+webpack.config.js
+*.vsix
+.npmignore
+TODO.md
+CONTRIBUTING.md
