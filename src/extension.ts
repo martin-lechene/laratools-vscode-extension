@@ -98,10 +98,10 @@ function confirm(msg: string): Thenable<boolean> {
 }
 
 // ---------- LARAVEL DETECTION ----------
-async function detectLaravel(_context: vscode.ExtensionContext) {
+async function detectLaravel(_context: vscode.ExtensionContext): Promise<void> {
   const root = detectLaravelRoot();
-  if (!root) return vscode.window.showErrorMessage('Aucun projet Laravel détecté');
-  const version = await execArtisan(root, '--version');
+  if (!root) { vscode.window.showErrorMessage('Aucun projet Laravel détecté'); return; }
+  await execArtisan(root, '--version');
   const features = [
     { name: 'Livewire', check: '/app/Http/Livewire' },
     { name: 'Jetstream', check: '/vendor/laravel/jetstream' },
@@ -110,19 +110,19 @@ async function detectLaravel(_context: vscode.ExtensionContext) {
     { name: 'Sail', check: 'docker-compose.yml' },
     { name: 'Pest', check: '/vendor/pestphp' }
   ].filter(f => existsSyncSafe(path.join(root, f.check)));
-  vscode.window.showInformationMessage(`Laravel ${version.trim()}\n${features.map(f => f.name).join(', ')}`);
+  vscode.window.showInformationMessage(`Laravel\n${features.map(f => f.name).join(', ')}`);
 }
 
-function execArtisan(cwd: string, args: string): Promise<string> {
+function execArtisan(cwd: string, args: string): Promise<void> {
   return new Promise((resolve) => {
     const term = vscode.window.createTerminal({ cwd });
     term.sendText(`${settings.useSail ? './vendor/bin/sail ' : 'php '}artisan ${args}`);
-    resolve(args);
+    resolve();
   });
 }
 
 // ---------- ARTISAN GENERATOR ----------
-async function generateArtisan(_context: vscode.ExtensionContext) {
+async function generateArtisan(_context: vscode.ExtensionContext): Promise<void> {
   const types = ['model', 'controller', 'migration', 'seeder', 'factory', 'request', 'test'];
   const type = await vscode.window.showQuickPick(types, { placeHolder: 'Choisir un élément à générer' });
   if (!type) return;
@@ -134,25 +134,25 @@ async function generateArtisan(_context: vscode.ExtensionContext) {
     if (await confirm('Ajouter factory ?')) opts.push('--factory');
     if (await confirm('Ajouter resource controller ?')) opts.push('--resource');
   }
-  runArtisanCommand(`make:${type} ${name} ${opts.join(' ')}`);
+  await runArtisanCommand(`make:${type} ${name} ${opts.join(' ')}`);
 }
 
-function runArtisan(_contextOrCmd?: any) {
+function runArtisan(_contextOrCmd?: any): void {
   vscode.window.showInputBox({ prompt: 'Commande artisan (ex: migrate:fresh)' })
-    .then(cmd => cmd && runArtisanCommand(cmd));
+    .then(cmd => cmd ? runArtisanCommand(cmd) : undefined);
 }
 
-async function runArtisanCommand(cmd: string) {
+async function runArtisanCommand(cmd: string): Promise<void> {
   if (settings.confirmBeforeCommand && !(await confirm(`Exécuter "${cmd}" ?`))) return;
   const root = detectLaravelRoot();
-  if (!root) return vscode.window.showErrorMessage('Projet Laravel introuvable');
+  if (!root) { vscode.window.showErrorMessage('Projet Laravel introuvable'); return; }
   const term = vscode.window.createTerminal({ cwd: root });
   term.show();
   term.sendText(`${settings.useSail ? './vendor/bin/sail ' : 'php '}artisan ${cmd}`);
 }
 
 // ---------- BLADE COMPONENT SEARCH ----------
-async function searchBladeComponents() {
+async function searchBladeComponents(): Promise<void> {
   const root = detectLaravelRoot();
   if (!root) return;
   const results: string[] = [];
@@ -175,7 +175,7 @@ async function searchBladeComponents() {
 }
 
 // ---------- RUN TESTS ----------
-async function runTests() {
+async function runTests(): Promise<void> {
   const root = detectLaravelRoot();
   if (!root) return;
   const command = settings.usePest ? 'vendor/bin/pest' : 'vendor/bin/phpunit';
