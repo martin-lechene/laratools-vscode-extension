@@ -44,7 +44,7 @@ function openConfigWebview(context: vscode.ExtensionContext) {
     }
   });
 }
-function getConfigHtml(webview: vscode.Webview): string {
+function getConfigHtml(_webview: vscode.Webview): string {
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -98,7 +98,7 @@ function confirm(msg: string): Thenable<boolean> {
 }
 
 // ---------- LARAVEL DETECTION ----------
-async function detectLaravel(context: vscode.ExtensionContext) {
+async function detectLaravel(_context: vscode.ExtensionContext) {
   const root = detectLaravelRoot();
   if (!root) return vscode.window.showErrorMessage('Aucun projet Laravel détecté');
   const version = await execArtisan(root, '--version');
@@ -122,7 +122,7 @@ function execArtisan(cwd: string, args: string): Promise<string> {
 }
 
 // ---------- ARTISAN GENERATOR ----------
-async function generateArtisan(context: vscode.ExtensionContext) {
+async function generateArtisan(_context: vscode.ExtensionContext) {
   const types = ['model', 'controller', 'migration', 'seeder', 'factory', 'request', 'test'];
   const type = await vscode.window.showQuickPick(types, { placeHolder: 'Choisir un élément à générer' });
   if (!type) return;
@@ -137,7 +137,7 @@ async function generateArtisan(context: vscode.ExtensionContext) {
   runArtisanCommand(`make:${type} ${name} ${opts.join(' ')}`);
 }
 
-function runArtisan(contextOrCmd?: any) {
+function runArtisan(_contextOrCmd?: any) {
   vscode.window.showInputBox({ prompt: 'Commande artisan (ex: migrate:fresh)' })
     .then(cmd => cmd && runArtisanCommand(cmd));
 }
@@ -171,7 +171,7 @@ async function searchBladeComponents() {
   };
   walk(path.join(root, 'resources/views'));
   vscode.window.showQuickPick(results, { placeHolder: 'Composants Blade trouvés' })
-    .then(file => file && vscode.window.showTextDocument(vscode.Uri.file(file)));
+    .then(file => file ? vscode.window.showTextDocument(vscode.Uri.file(file)) : undefined);
 }
 
 // ---------- RUN TESTS ----------

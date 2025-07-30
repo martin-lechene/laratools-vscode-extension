@@ -1,6 +1,7 @@
 const path = require('path');
 
 const config = {
+  mode: 'development',
   target: 'node',
   entry: './src/extension.ts',
   output: {
